@@ -1,6 +1,6 @@
 <h1>ExpNo 4 : Implement A* search algorithm for a Graph</h1> 
-<h3>Name:       </h3>
-<h3>Register Number:           </h3>
+<h3>Name: SANJAY K     </h3>
+<h3>Register Number: 212223220094          </h3>
 <H3>Aim:</H3>
 <p>To ImplementA * Search algorithm for a Graph using Python 3.</p>
 <H3>Algorithm:</H3>
@@ -117,3 +117,85 @@ G 0 <br>
 <h2>Sample Output</h2>
 <hr>
 Path found: ['A', 'E', 'D', 'G']
+
+<h3>Program</h3>
+
+    from collections import defaultdict
+    H_dist = {}
+    def aStarAlgo(start_node, stop_node):
+    open_set = set([start_node])  
+    closed_set = set()
+    g = {}            
+    parents = {}        
+    g[start_node] = 0
+    parents[start_node] = start_node
+
+    while len(open_set) > 0:
+        n = None
+        # Find node with lowest f(n) = g(n) + h(n)
+        for v in open_set:
+            if n is None or g[v] + heuristic(v) < g[n] + heuristic(n):
+                n = v
+
+        if n is None:
+            print("Path does not exist!")
+            return None
+
+        if n == stop_node:
+            path = []
+            while parents[n] != n:
+                path.append(n)
+                n = parents[n]
+            path.append(start_node)
+            path.reverse()
+            print("Path found:", path)
+            return path
+
+        if Graph_nodes[n] is not None:
+            for (m, weight) in get_neighbors(n):
+                if m not in open_set and m not in closed_set:
+                    open_set.add(m)
+                    parents[m] = n
+                    g[m] = g[n] + weight
+                else:
+                    if g[m] > g[n] + weight:
+                        g[m] = g[n] + weight
+                        parents[m] = n
+                        if m in closed_set:
+                            closed_set.remove(m)
+                            open_set.add(m)
+
+        open_set.remove(n)
+        closed_set.add(n)
+
+    print("Path does not exist!")
+    return None
+    def get_neighbors(v):
+    if v in Graph_nodes:
+        return Graph_nodes[v]
+    else:
+        return None
+    def heuristic(n):
+    return H_dist[n]
+    graph = defaultdict(list)
+    n, e = map(int, input().split())
+    for i in range(e):
+    u, v, cost = input().split()
+    cost = int(cost)
+    graph[u].append((v, cost))
+    graph[v].append((u, cost))  
+    for i in range(n):
+    line = input().split()
+    if len(line) != 2:
+        raise ValueError(f"Expected 2 values (node heuristic), got: {line}")
+    node, h = line
+    H_dist[node] = int(h)
+
+    Graph_nodes = graph
+    start = input().strip()
+    goal = input().strip()
+    aStarAlgo(start, goal)
+
+<h3>Output</h3>
+<img width="612" height="348" alt="Screenshot 2025-09-10 154117" src="https://github.com/user-attachments/assets/b4a741e3-e544-4389-9e95-63ca38ef3560" />
+
